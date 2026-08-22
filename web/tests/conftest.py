@@ -13,7 +13,8 @@ TEST_Q_PORT = int(os.environ.get("TEST_Q_PORT", 5099))
 
 REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 WEB_DIR = os.path.join(REPO_ROOT, "web")
-Q_EXECUTABLE = os.environ.get("Q_EXECUTABLE", r"C:\q\w64\q.exe")
+DEFAULT_Q_EXECUTABLE = "q" if os.name != "nt" else r"C:\q\w64\q.exe"
+Q_EXECUTABLE = os.environ.get("Q_EXECUTABLE", DEFAULT_Q_EXECUTABLE)
 Q_LOG_PATH = os.path.join(REPO_ROOT, "web", "tests", ".q_test_server.log")
 
 
@@ -23,7 +24,7 @@ def _q_is_ready(port, timeout_each=2):
     # readiness is only trusted once an actual query round-trips - probing
     # for a symbol that's only defined at the very end of the boot chain.
     sys.path.insert(0, WEB_DIR)
-    from qpython import qconnection
+    from qpython_compat import qconnection
 
     conn = qconnection.QConnection(host="localhost", port=port, timeout=timeout_each)
     try:

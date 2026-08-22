@@ -1,12 +1,13 @@
+import os
 import threading
 
 import flask
-from qpython import qconnection
+from qpython_compat import qconnection
 
 import config
 
 
-API_SCRIPT = "./web/q/web_api.q"
+API_SCRIPT = os.path.join(os.path.dirname(__file__), "q", "web_api.q")
 
 
 class QClient:

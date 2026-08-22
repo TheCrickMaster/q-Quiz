@@ -31,7 +31,8 @@ REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 WEB_DIR = os.path.join(REPO_ROOT, "web")
 LOG_DIR = os.path.join(REPO_ROOT, "logs")
 
-Q_EXECUTABLE = os.environ.get("Q_EXECUTABLE", r"C:\q\w64\q.exe")
+DEFAULT_Q_EXECUTABLE = "q" if os.name != "nt" else r"C:\q\w64\q.exe"
+Q_EXECUTABLE = os.environ.get("Q_EXECUTABLE", DEFAULT_Q_EXECUTABLE)
 Q_PORT = os.environ.get("Q_PORT", "5000")
 PYTHON_EXECUTABLE = sys.executable
 POLL_INTERVAL_SECONDS = int(os.environ.get("POLL_INTERVAL_SECONDS", 5))
