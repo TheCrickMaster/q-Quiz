@@ -113,14 +113,13 @@
  };
 
 .quiz.loadResults:{[]
-    if[`tab in key `:./results; load `:./results/tab];
-    / Older saved files predate the user column - backfill it with null
-    / symbols rather than dropping straight into a 6-column insert schema
-    / mismatch the moment anything new gets recorded. Reads tab but never
-    / assigns to it - q treats any name assigned anywhere in a function
-    / body as local for the whole body, which would otherwise shadow the
-    / global tab that load just populated.
-    upgraded:$[`user in cols tab; tab; update user:(count tab)#` from tab];
+    filePath:`:./results/tab;
+    / `load` inside a function can create a local `tab` symbol; keep the
+    / saved value in a local variable and treat a missing / empty file as an
+    / empty table instead of comparing a whole table to null.
+    saved:@[get;filePath;([])];
+    if[0 = count saved; :()];
+    upgraded:$[`user in cols saved; saved; update user:(count saved)#` from saved];
     .quiz.history:upgraded;
  };
 
